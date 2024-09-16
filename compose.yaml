@@ -25,6 +25,10 @@ services:
       - "27017:27017"
     env_file:
       - .env
+     environment:
+     #codeium wrote these lines for me becuse mongo was not running
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
     volumes:
       - mongodata:/data/db
     networks:
