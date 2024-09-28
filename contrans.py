@@ -1,50 +1,46 @@
 import numpy as np
 import pandas as pd
 import os
-
-
+#import dotenv
+import requests
+import json
 class contrans:
         def __init__(self):
-                self.mypassword = os.getenv('mypassword')
-        """
-        Initialize a contrans object, getting the mypassword from environment
-        variable `mypassword`.
-        """
-
+            #dotenv.load_dotenv()
+            self.mypassword = os.getenv('mypassword')
+            self.congresskey = os.getenv('congresskey')
+            self.newskey = os.getenv('newskey')
         def get_votes(self):
-                url = 'https://voteview.com/static/data/out/votes/H118_votes.csv'
-        """
-        Get the 118th House of Representatives' votes.
-
-        This function will return a dataframe of the 118th House of
-        Representatives' votes. The dataframe will have the following columns:
-        - congress: The congress number.
-        - chamber: The chamber of congress.
-        - rollnumber: The vote number.
-        - icpsr: The ICPSR number of the member.
-        - cast_code: The code of the vote cast by the member.
-        - prob: The probability of the member voting for the bill.
-
-        Returns:
-            A dataframe of the 118th House of Representatives' votes.
-        """
-                votes = pd.read_csv(url)
-                return votes
-        
+            url = 'https://voteview.com/static/data/out/votes/H118_votes.csv'
+            votes = pd.read_csv(url)
+            return votes
         def get_ideology(self):
-                url = 'https://voteview.com/static/data/out/members/H118_members.csv'
-        """
-        Get the 118th House of Representatives' members' ideology.
+            url = 'https://voteview.com/static/data/out/members/H118_members.csv'
+            members = pd.read_csv(url)
+            return members
+        def get_useragent(self):
+            url = 'https://httpbin.org/user-agent'
+            r = requests.get(url)
+            useragent = json.loads(r.text)['user-agent']
+            return useragent
+        
+        def make_headers(self,email='yqg7ay@virginia.edu'):
+            useragent=self.get_useragent()
+            headers = {
+                'User-Agent': useragent,
+                'From': email
+            }
+            return headers
 
-        This function will return a dataframe of the 118th House of
-        Representatives' members' ideology. The dataframe will have the following columns:
-        - bioname: The name of the member.
-        - icpsr: The ICPSR number of the member.
-        - party_code: The party of the member.
-        - dw_nominate_dim1: The DW-NOMINATE score of the member.
-
-        Returns:
-            A dataframe of the 118th House of Representatives' members' ideology.
-        """
-                members = pd.read_csv(url)
-                return members
+        def get_bioguideIDs(self):
+            params = {'api_key':self.congresskey}
+            headers = self.make_headers()
+            root = 'https://api.congress.gov/v3'
+            endpoint = '/member'
+            r = requests.get(root + endpoint,
+                             params=params,
+                             headers=headers)
+            bio_df = pd.json_normalize(r.json(),
+                                       record_path=['members'])
+            bio_df = bio_df[['name', 'state', 'district', 'bioguideID']]
+            return bio_df
