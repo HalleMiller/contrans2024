@@ -4,90 +4,47 @@ import os
 
 
 class contrans:
-    def __init__(self):
+        def __init__(self):
+                self.mypassword = os.getenv('mypassword')
         """
-        Initialize a contrans object.  This object provides access to several
-        functions that are useful for accessing data related to the US Congress.
+        Initialize a contrans object, getting the mypassword from environment
+        variable `mypassword`.
+        """
 
+        def get_votes(self):
+                url = 'https://voteview.com/static/data/out/votes/H118_votes.csv'
+        """
+        Get the 118th House of Representatives' votes.
+
+        This function will return a dataframe of the 118th House of
+        Representatives' votes. The dataframe will have the following columns:
+        - congress: The congress number.
+        - chamber: The chamber of congress.
+        - rollnumber: The vote number.
+        - icpsr: The ICPSR number of the member.
+        - cast_code: The code of the vote cast by the member.
+        - prob: The probability of the member voting for the bill.
+
+        Returns:
+            A dataframe of the 118th House of Representatives' votes.
+        """
+                votes = pd.read_csv(url)
+                return votes
         
+        def get_ideology(self):
+                url = 'https://voteview.com/static/data/out/members/H118_members.csv'
         """
-        self.mypassword = os.getenv('mypassword')
+        Get the 118th House of Representatives' members' ideology.
 
-    def get_votes(self):
-        """
-        Download vote data for the 118th US House of Representatives from 
-        Voteview.com and return it as a pandas DataFrame.
+        This function will return a dataframe of the 118th House of
+        Representatives' members' ideology. The dataframe will have the following columns:
+        - bioname: The name of the member.
+        - icpsr: The ICPSR number of the member.
+        - party_code: The party of the member.
+        - dw_nominate_dim1: The DW-NOMINATE score of the member.
 
-        Returns
-        -------
-        votes : pandas DataFrame
-            A DataFrame containing vote data for the 118th US House of 
-            Representatives.  The columns are:
-            
-            * ``congress``: The number of the congress (e.g. 118)
-            - ``chamber``: The chamber of Congress (e.g. House or Senate)
-            - ``legislator``: The last name of the legislator
-            - ``leg_id``: A unique identifier for the legislator
-            - ``vote_id``: A unique identifier for the vote
-            - ``issue_id``: A unique identifier for the issue
-            - ``vote_date``: The date of the vote (in the format 
-                ``YYYY-MM-DD``)
-            - ``vote_desc``: A description of the vote
-            - ``vote_category``: A categorization of the vote (e.g. 
-                ``Democrat``, ``Republican``, ``Independent``)
-            - ``ayes``: The number of ``aye`` votes
-            - ``nays``: The number of ``nay`` votes
-            - ``total_votes``: The total number of votes cast
-            - ``dems_in_favor``: The number of Democratic votes in favor
-            - ``repubs_in_favor``: The number of Republican votes in favor
-            - ``independents_in_favor``: The number of Independent votes in 
-                favor
-            - ``democrats``: The number of Democratic votes
-            - ``republicans``: The number of Republican votes
-            - ``independents``: The number of Independent votes
-            - ``democratic_share``: The proportion of Democratic votes
-            - ``republican_share``: The proportion of Republican votes
-            - ``independent_share``: The proportion of Independent votes
-            - ``bipartisan_vote``: A boolean indicating whether the vote was 
-                bipartisan (i.e. whether members of more than one party voted 
-                in favor)
+        Returns:
+            A dataframe of the 118th House of Representatives' members' ideology.
         """
-        url = 'https://voteview.com/static/data/out/votes/H118_votes.csv'
-        votes = pd.read_csv(url)
-        return votes
-    def get_ideology(self):
-        """
-        Download ideology data for members of the 118th US House of 
-        Representatives from Voteview.com and return it as a pandas DataFrame.
-
-        Returns
-        -------
-        members : pandas DataFrame
-            A DataFrame containing ideology data for the 118th US House of 
-            Representatives.  The columns are:
-            
-            * ``leg_id``: A unique identifier for the legislator
-            - ``chamber``: The chamber of Congress (e.g. House or Senate)
-            - ``congress``: The number of the congress (e.g. 118)
-            - ``state_abbrev``: The two letter abbreviation for the state
-            - ``district``: The number of the district (e.g. 1, 2, 3, etc.)
-            - ``party_code``: A code indicating the party affiliation of the 
-                legislator (e.g. 100 for Democrats, 200 for Republicans, 
-                328 for Independents)
-            - ``party``: A string indicating the party affiliation of the 
-                legislator (e.g. 'Democrat', 'Republican', 'Independent')
-            - ``name``: The full name of the legislator
-            - ``nominate_dim1``: The first dimension of the Nominate score
-            - ``nominate_dim2``: The second dimension of the Nominate score
-            - ``nominate_dim1_prev_term``: The first dimension of the Nominate 
-                score for the previous term
-            - ``nominate_dim2_prev_term``: The second dimension of the Nominate 
-                score for the previous term
-        """
-        url = 'https://voteview.com/static/data/out/votes/H118_votes.csv'
-        members = pd.read_csv(url)
-        return members
-    
-    
-        
-        
+                members = pd.read_csv(url)
+                return members
