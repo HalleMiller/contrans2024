@@ -53,7 +53,7 @@ class contrans:
             j = 0
             bio_df = pd.DataFrame()
             while j < totalrecords:
-                params = ['offset'] = j
+                params['offset'] = j
                 r = requests.get(root + endpoint,
                                  params=params,
                                  headers=headers)
