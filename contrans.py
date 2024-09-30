@@ -24,11 +24,12 @@ class contrans:
             useragent = json.loads(r.text)['user-agent']
             return useragent
         
-        def make_headers(self,email='yqg7ay@virginia.edu'):
+        def make_headers(self,
+                         email='yqg7ay@virginia.edu'):
             useragent=self.get_useragent()
             headers = {
-                'User-Agent': useragent,
-                'From': email
+                    'User-Agent': useragent,
+                    'From': email
             }
             return headers
 
