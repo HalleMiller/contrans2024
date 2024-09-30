@@ -1,19 +1,23 @@
 import numpy as np
 import pandas as pd
 import os
-#import dotenv
+import dotenv
 import requests
 import json
+
 class contrans:
         def __init__(self):
-            #dotenv.load_dotenv()
+            dotenv.load_dotenv()
             self.mypassword = os.getenv('mypassword')
             self.congresskey = os.getenv('congresskey')
             self.newskey = os.getenv('newskey')
+        
+        
         def get_votes(self):
             url = 'https://voteview.com/static/data/out/votes/H118_votes.csv'
             votes = pd.read_csv(url)
             return votes
+        
         def get_ideology(self):
             url = 'https://voteview.com/static/data/out/members/H118_members.csv'
             members = pd.read_csv(url)
@@ -33,9 +37,10 @@ class contrans:
             }
             return headers
 
+        
         def get_bioguideIDs(self):
             params = {'api_key':self.congresskey,
-                      'limit':250}
+                      'limit':1}
             headers = self.make_headers()
             root = 'https://api.congress.gov/v3'
             endpoint = '/member'
@@ -44,18 +49,17 @@ class contrans:
                              headers=headers)
             totalrecords = r.json()['pagination']['count']
             
-            j=0
-            pd.DataFrame()
-
-            records = []
+            params['limit'] = 250    
+            j = 0
+            bio_df = pd.DataFrame()
             while j < totalrecords:
-                params = ['offset']=j
+                params = ['offset'] = j
                 r = requests.get(root + endpoint,
                                  params=params,
                                  headers=headers)
                 records=pd.json_normalize(r.json()['members'])
                 bio_df= pd.concat([bio_df,records])
-                j=j+250
+                j = j + 250
 
             #bio_df = bio_df[['name', 'state', 'district', 'bioguideID','partyName']] 
             return bio_df

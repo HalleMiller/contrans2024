@@ -6,8 +6,8 @@ name = "pypi"
 [packages]
 numpy = "==1.26.0"
 pandas = "==2.2.2"
-requests = "*"
-python-dotenv = "*"
+requests = "==2.32.3"
+python-dotenv = "==1.0.1"
 ydata-profiling = "==4.9.0"
 beautifulsoup4 = "==4.12.3"
 psycopg = {extras = ["pool", "binary"], version = "==3.2.1"}
@@ -26,8 +26,10 @@ dash-bootstrap-components = "==1.6.0"
 scikit-learn = "==1.5.1"
 jupyter = "*"
 jupyterlab = "==4.2.5"
+ipykernel = "*"
 
 [dev-packages]
 
 [requires]
 python_version = "3.12"
+python_full_version = "3.12.5"
