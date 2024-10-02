@@ -63,3 +63,48 @@ class contrans:
 
             #bio_df = bio_df[['name', 'state', 'district', 'bioguideID','partyName']] 
             return bio_df
+        
+        
+        def get_bioguide(self, name, state=None, district=None):
+            
+            members = self.get_bioguideIDs() #replace with SQL query
+             
+            members['name'] = members['name'].str.lower().str.strip()
+            name = name.lower().strip()
+
+            tokeep = [name in x for x in members['name']]
+            members = members[tokeep]
+
+            if state is not None:
+                members = members.query('state == @state')
+            
+            if district is not None:
+                members = members.query('district == @district')
+            
+            return members.reset_index(drop=True)
+
+        def get_sponsoredlegislation(self, bioguideid):
+            headers = ct.make_headers()
+            root = 'https://api.congress.gov/v3'
+            endpoint = f'member/{bioguideId}/sponsored-legislation'
+            params = {'api_key': congresskey,
+                    'limit': 1}
+            r = requests.get(root + endpoint,
+                 headers=headers,
+                 params=params)
+            totalrecords = r.json()['pagination']['count']
+
+            params['limit'] = 250
+            j = 0
+            bills_dict = {}
+            while j < totalrecords:
+                params['offset'] = j
+                r = requests.get(root + endpoint,
+                                 params=params,
+                                 headers=headers)
+                records=pd.json_normalize(r.json()['sponsoredLegislation'])
+                bills_dict= bills_dict.update(records)
+                j = j + 250
+
+            return bills_dict
+        
