@@ -123,3 +123,10 @@ class contrans:
             billtext = mysoup.text
             bill_json['text'] = billtext
             return bill_json
+        
+        def get_news(self, name):
+            params = {'api_key': self.newskey}
+            root = 'https://api.newscatcherapi.com/v2/search'
+            endpoint = '/?q='
+            r = requests.get(root + endpoint,
+                             params=params)
