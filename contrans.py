@@ -125,8 +125,19 @@ class contrans:
             return bill_json
         
         def get_news(self, name):
-            params = {'api_key': self.newskey}
-            root = 'https://api.newscatcherapi.com/v2/search'
-            endpoint = '/?q='
+            params = {'apikey': self.newskey}
+            root = 'https://newsapi.org/v2/everything'
+            endpoint = 'q={name}&apikey={key}'.format(name=name, key=self.newskey)
+            name = name.lower().strip()
             r = requests.get(root + endpoint,
                              params=params)
+            params['limit'] = 200
+            j = 0
+            article_list = []
+            while j < 200:
+                    params['offset'] = j
+                    r = requests.get(root + endpoint,
+                                     params=params)
+                    articles = r.json()['articles']
+                    article_list = article_list + articles
+            return article_list
