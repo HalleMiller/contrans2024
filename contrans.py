@@ -162,7 +162,8 @@ class contrans:
                     article_list = article_list + articles
             return article_list
             
-        def make_cand_table(self):
+        def make_cand_table(self,members):
+                #members is output of get_terms()
                 members = self.get_bioguideIDs()
                 replace_map = {'Republican': 'R','Democratic': 'D','Independent': 'I'}
                 members['partyletter'] = members['partyName'].replace(replace_map)
@@ -190,7 +191,7 @@ class contrans:
                 crosswalk = pd.merge(members, cands, 
                      left_on=['name2', 'DistIDRunFor'],
                      right_on=['name2', 'DistIDRunFor'],
-                     how = 'inner')
+                     how = 'left')
                 return crosswalk
         
         def terms_df(self,members):
@@ -205,3 +206,23 @@ class contrans:
             members = members.drop('terms.item', axis=1)
             return termsDF, members
              
+### Methods for building the thrid normal form relational DB tables
+
+        def make_members_df(self, members, ideology):
+                '''
+                # members should be the output of get_bioguideIDs(),
+                with terms removed by get_terms(),
+                augmented with contributions by make_cand_table().
+                ideology should be the output of get_ideology().
+                '''
+                members_df = pd.merge(members, ideology,
+                                      left_on='bioguideId',
+                                      right_on='bioguideId',
+                                      how='left')
+                return members_df
+        def make_terms_df(self):
+                return self
+        def make_votes_df(self):
+                return self
+        def make_agreemtent_df(self):
+                return self
