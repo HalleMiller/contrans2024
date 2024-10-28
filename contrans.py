@@ -82,7 +82,7 @@ class contrans:
                 bio_df= pd.concat([bio_df,records])
                 j = j + 250
 
-            #bio_df = bio_df[['name', 'state', 'district', 'bioguideID','partyName']] 
+            bio_df = bio_df[['name', 'state', 'district', 'bioguideID','partyName']] 
             return bio_df
         
         
