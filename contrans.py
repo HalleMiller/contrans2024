@@ -316,9 +316,6 @@ class contrans:
                              index=False,   
                              chunksize=1000,
                              if_exists='replace')
-                
-        def make_agreemtent_df(self):
-                return self
         
         def dbml_helper(self, data):
             dt = data.dtypes.reset_index().rename({0:'dtype'}, axis=1)
