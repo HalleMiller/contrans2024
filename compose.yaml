@@ -9,6 +9,7 @@ services:
       - ./:/contrans2024
     networks:
       - dbnetwork
+  
   postgres:
     image: postgres:latest
     ports:
@@ -19,6 +20,7 @@ services:
       - postgresdata:/var/lib/postgresql/data
     networks:
       - dbnetwork
+  
   mongo:
     image: mongo:latest
     ports:
